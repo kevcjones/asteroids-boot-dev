@@ -14,21 +14,31 @@ from shot import Shot
 class Player(CircleShape):
     def __init__(self, x, y):
         super().__init__(x, y, PLAYER_RADIUS)
-        self.acceleration = 0
         self.rotation = 0
         self.next_shot = PLAYER_SHOOT_COOLDOWN
+        self.accelerating = False
 
     # in the player class
-    def triangle(self):
+    def body(self):
         forward = pygame.Vector2(0, 1).rotate(self.rotation)
         right = pygame.Vector2(0, 1).rotate(self.rotation + 90) * self.radius / 1.5
         a = self.position + forward * self.radius
         b = self.position - forward * self.radius - right
         c = self.position - forward * self.radius + right
         return [a, b, c]
+    
+    def booster(self):
+        forward = pygame.Vector2(0, 1).rotate(self.rotation)
+        right = pygame.Vector2(0, 1).rotate(self.rotation + 90) * self.radius / 1.5
+        a = self.position - forward * self.radius*2
+        b = self.position - forward * (self.radius + 1) - right/2
+        c = self.position - forward * (self.radius + 1) + right/2
+        return [a, b, c]
 
     def draw(self, screen):
-        pygame.draw.polygon(screen, (255, 255, 255), self.triangle(), 2)
+        pygame.draw.polygon(screen, "white", self.body(), 2)
+        if self.accelerating > 0:
+            pygame.draw.polygon(screen, "yellow", self.booster(), 3)
 
     def update(self, dt, screen):
         keys = pygame.key.get_pressed()
@@ -39,6 +49,9 @@ class Player(CircleShape):
             self.rotate(dt)
         if keys[pygame.K_w]:
             self.accelerate()
+            self.accelerating = True
+        else:
+            self.accelerating = False
         if keys[pygame.K_SPACE]:
             self.shoot(dt)
 
