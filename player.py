@@ -39,6 +39,7 @@ class Player(CircleShape):
         pygame.draw.polygon(screen, "white", self.body(), 2)
         if self.accelerating > 0:
             pygame.draw.polygon(screen, "yellow", self.booster(), 3)
+        # pygame.draw.circle(screen, "green", self.position, self.radius, 1)
 
     def update(self, dt, screen):
         keys = pygame.key.get_pressed()
