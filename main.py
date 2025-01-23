@@ -41,7 +41,7 @@ def main():
                 return
 
         for entity in updatable:
-            entity.update(dt)
+            entity.update(dt, screen)
 
         for asteroid in asteroids:
             if asteroid.collision(player):
